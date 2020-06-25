@@ -1,0 +1,6 @@
+insert Reksio 4 Franciszek_Nowak 12.4 FALSE JAMNIK
+insert Lord 8 Przemysław_Modalski 26.8 TRUE LABRADOR
+insert Wolf 3 Swen_Amundsen 18.5 TRUE HUSKY
+insert Chica 5 Monica_Smith 8.0 FALSE CHIUHUAHUA
+insert Komes 6 Agnieszka_Kowalska 17.5 FALSE GOLDEN_RETRIEVER
+

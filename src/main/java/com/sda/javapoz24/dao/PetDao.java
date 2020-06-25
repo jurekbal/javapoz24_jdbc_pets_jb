@@ -24,7 +24,7 @@ public class PetDao {
         }
     }
 
-    private void insertPet(Pet pet) {
+    public void insertPet(Pet pet) {
         try (Connection connection = connector.createConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     PetQuerries.INSERT_PET,
@@ -67,6 +67,7 @@ public class PetDao {
                 pet.setWeight(Double.parseDouble(rekordy.getString(5)));
                 pet.setPureRace(Boolean.parseBoolean(rekordy.getString(6)));
 
+                pets.add(pet);
             }
 
         } catch (SQLException throwables) {
@@ -89,12 +90,46 @@ public class PetDao {
     }
 
     // auxiliary READ for specific, required UPDATE demands
-    public Pet GetOnePet(long inentifier) {
-        // TODO implement SELECT * WHERE ID =?
-        return null;
+    public Pet getOnePet(long identifier) {
+        Pet pet = new Pet();
+        try (Connection connection = connector.createConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(PetQuerries.SELECT_PET_BY_ID);
+            preparedStatement.setLong(1, identifier);
+
+            ResultSet rekord = preparedStatement.executeQuery();
+
+            while (rekord.next()){
+                pet.setId(identifier);
+                pet.setName(rekord.getString(1));
+                pet.setAge(Integer.parseInt(rekord.getString(2)));
+                pet.setOwnerName(rekord.getString(3));
+                pet.setWeight(Double.parseDouble(rekord.getString(4)));
+                pet.setPureRace(Boolean.parseBoolean(rekord.getString(5)));
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return pet;
     }
 
     public void updatePet(Pet updatedPet) {
-        //TODO implement UPDATE function
+        try (Connection connection = connector.createConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(PetQuerries.UPDATE_PET);
+            preparedStatement.setString(1, updatedPet.getName());
+            preparedStatement.setInt(2, updatedPet.getAge());
+            preparedStatement.setString(3, updatedPet.getOwnerName());
+            preparedStatement.setDouble(4, updatedPet.getWeight());
+            preparedStatement.setBoolean(5, updatedPet.isPureRace());
+            preparedStatement.setString(6, updatedPet.getRace().toString());
+            preparedStatement.setLong(7, updatedPet.getId());
+
+            int affectedRecord = preparedStatement.executeUpdate();
+            System.out.println("Affected records: " + affectedRecord);
+            
+            
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }
